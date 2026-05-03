@@ -140,7 +140,7 @@ public class GameView extends View{
 
 		// ca-app-pub-5753059750056945/3724851181
 		InterstitialAd.load(getContext(), getResources().getString(R.string.interstitial_ad), adRequest,
-			new InterstitialAdLoadCallback() {
+			new InterstitialAdLoadCallback(){
 				@Override
 				public void onAdLoaded(InterstitialAd interstitialAd){
 					mInterstitialAd = interstitialAd;
@@ -157,7 +157,7 @@ public class GameView extends View{
 		if (mInterstitialAd != null) {
 			mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
 				@Override
-				public void onAdDismissedFullScreenContent() {
+				public void onAdDismissedFullScreenContent(){
 					mInterstitialAd = null;
 					loadInterstitial();
 					callback.run();

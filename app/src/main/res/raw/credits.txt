@@ -18,6 +18,7 @@ MangoGames ID: {https://id.orangomango.org^FF4CC9F0}
 ~~~~~~~~~
 
 &&Desktop version (Java/JavaFX) {source^FFE1BEE7} {code^FFE1BEE7} ~ {https://github.com/OrangoMango/Snake^FF4CC9F0}
+&&Android version {source^FFE1BEE7} {code^FFE1BEE7} ~ {https://github.com/OrangoMango/MangoSnake^FF4CC9F0}
 &&{Desktop^FFE1BEE7} and {Browser^FFE1BEE7} version game page ~ {https://orangomango.itch.io/snake^FF4CC9F0}
 &&{Game^FFE1BEE7} {Page^FFE1BEE7} and {Leaderboards^FFE1BEE7} ~ {https://id.orangomango.org/games/mangosnake^FF4CC9F0}
 
