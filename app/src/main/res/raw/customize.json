@@ -1,0 +1,390 @@
+{
+	"snake": {
+		"colors": {
+			"0": {
+				"name": "Emerald",
+				"color": "FF00C853",
+				"message": "Default snake color."
+			},
+			"1": {
+				"name": "Cyan",
+				"color": "FF00E5FF",
+				"message": "Score at least 40 in Easy mode."
+			},
+			"2": {
+				"name": "Purple",
+				"color": "FFD500F9",
+				"message": "Score at least 20 in Extreme mode."
+			},
+			"3": {
+				"name": "Plasma Pink",
+				"color": "FFF50057",
+				"message": "Score at least 30 in Hard mode."
+			},
+			"4": {
+				"name": "Gold",
+				"color": "FFFFD600",
+				"message": "Score at least 100 in Medium mode."
+			},
+			"5": {
+				"name": "White",
+				"color": "FFF8F8F8",
+				"message": "Eat a total of 200 mangoes."
+			},
+			"6": {
+				"name": "Deep Orange",
+				"color": "FFFF3D00",
+				"message": "Connect your MangoGames ID."
+			},
+			"7": {
+				"name": "Indigo",
+				"color": "FF3D5AFE",
+				"message": "Score at least 150 in Medium mode."
+			},
+			"8": {
+				"name": "Lime",
+				"color": "FF76FF03",
+				"message": "300 MangoCoins.",
+				"value": 300
+			},
+			"9": {
+				"name": "Hot Pink",
+				"color": "FFFF1493",
+				"message": "Play 200 rounds."
+			},
+			"10": {
+				"name": "Silver",
+				"color": "FFB0BEC5",
+				"message": "450 MangoCoins.",
+				"value": 450
+			},
+			"11": {
+				"name": "Obsidian",
+				"color": "FF212121",
+				"message": "Eat a total of 4000 mangoes."
+			},
+			"12": {
+				"name": "Sahara",
+				"color": "FFFFFFFF",
+				"message": "1500 MangoCoins.",
+				"value": 1500,
+				"button_image": true
+			},
+			"13": {
+				"name": "Rainbow",
+				"color": "FFFFFFFF",
+				"message": "Score at least 20 in Extreme mode.",
+				"button_image": true
+			},
+			"14": {
+				"name": "Bee",
+				"color": "FFFFCC00",
+				"message": "Collect all non-premium skins.",
+				"button_image": true
+			},
+			"15": {
+				"name": "Tiger",
+				"color": "FFE06500",
+				"message": "Complete a game in any difficulty.",
+				"button_image": true
+			},
+			"16": {
+				"name": "Deep Sea",
+				"color": "FF0066FF",
+				"message": "900 MangoCoins.",
+				"value": 900,
+				"button_image": true
+			},
+			"17": {
+				"name": "Neon Magenta",
+				"color": "FFBF0E7A",
+				"message": "Unlocks all premium skins and removes all ads.\nAnd you support my work of course, thanks :)",
+				"purchaseId": "skin_premium",
+				"button_image": true
+			},
+			"18": {
+				"name": "Bronze",
+				"color": "FFCA6736",
+				"message": "Survive 8 min in Easy mode.",
+				"button_image": true
+			},
+			"19": {
+				"name": "Silver",
+				"color": "FF9BADB7",
+				"message": "Survive 6 min in Medium mode.",
+				"button_image": true
+			},
+			"20": {
+				"name": "Gold",
+				"color": "FFE2CA29",
+				"message": "Survive 3 min 30s in Hard mode.",
+				"button_image": true
+			},
+			"21": {
+				"name": "Diamond",
+				"color": "FF01F7F2",
+				"message": "Survive 1 min 30s in Extreme mode.",
+				"button_image": true
+			},
+			"22": {
+				"name": "Nebula",
+				"color": "FF4450C4",
+				"message": "Unlocks all premium skins and removes all ads.\nAnd you support my work of course, thanks :)",
+				"purchaseId": "skin_premium",
+				"button_image": true
+			},
+			"23": {
+				"name": "Magma",
+				"color": "FFFF4904",
+				"message": "3500 MangoCoins.",
+				"value": 3500,
+				"button_image": true
+			},
+			"24": {
+				"name": "Zebra",
+				"color": "FFFFFFFF",
+				"message": "Play for 1 hour.",
+				"button_image": true
+			},
+			"25": {
+				"name": "Modular Yellow",
+				"color": "FFFBF236",
+				"message": "Play for 2 hours.",
+				"button_image": true
+			},
+			"26": {
+				"name": "Game Launch Skin",
+				"color": "FFFF0000",
+				"message": "5000 MangoCoins or unlock for FREE in the shop.",
+				"value": 5000,
+				"button_image": true
+			},
+			"27": {
+				"name": "Quantum Link",
+				"color": "FF3636FB",
+				"message": "3500 MangoCoins.",
+				"value": 3500,
+				"button_image": true
+			},
+			"28": {
+				"name": "PI-thon",
+				"color": "FF00FF00",
+				"message": "2000 MangoCoins.",
+				"value": 2000,
+				"button_image": true
+			},
+			"29": {
+				"name": "Nothing",
+				"color": "FFFFFFFF",
+				"message": "2000 MangoCoins.",
+				"value": 2000,
+				"button_image": true
+			}
+		}
+	},
+
+	"apple": {
+		"colors": {
+			"0": {
+				"name": "Red",
+				"color": "FFFF1744",
+				"internalColor": "CCFECACA",
+				"message": "Default food color."
+			},
+			"1": {
+				"name": "Yellow",
+				"color": "FFFFEA00",
+				"internalColor": "CCFFF9C4",
+				"message": "Play 100 rounds."
+			},
+			"2": {
+				"name": "Frost",
+				"color": "FF00E676",
+				"internalColor": "CCB9F6CA",
+				"message": "Score at least 70 in Easy mode."
+			},
+			"3": {
+				"name": "Blue",
+				"color": "FF2979FF",
+				"internalColor": "CCBBDEFB",
+				"message": "Be in top 5 on any leaderboard.",
+				"permanent" : true
+			},
+			"4": {
+				"name": "Coral",
+				"color": "FFFF4081",
+				"internalColor": "CCF8BBD0",
+				"message": "Eat a total of 500 mangoes."
+			},
+			"5": {
+				"name": "Magenta",
+				"color": "FFFF00D4",
+				"internalColor": "CCF48FB1",
+				"message": "Be in top 3 on any leaderboard.",
+				"permanent" : true
+			},
+			"6": {
+				"name": "Amber",
+				"color": "FFFFAB00",
+				"internalColor": "CCFFECB3",
+				"message": "Play 400 rounds."
+			},
+			"7": {
+				"name": "Sky Blue",
+				"color": "FF00B0FF",
+				"internalColor": "CCE1F5FE",
+				"message": "Unlocks all premium skins and removes all ads.\nAnd you support my work of course, thanks :)",
+				"purchaseId": "skin_premium"
+			},
+			"8": {
+				"name": "Mint",
+				"color": "FFB9F6CA",
+				"internalColor": "CCF1F8E9",
+				"message": "250 MangoCoins.",
+				"value": 250
+			},
+			"9": {
+				"name": "Lavender",
+				"color": "FFE1BEE7",
+				"internalColor": "CCF3E5F5",
+				"message": "250 MangoCoins.",
+				"value": 250
+			},
+			"10": {
+				"name": "Charcoal",
+				"color": "FF37474F",
+				"internalColor": "CCCFD8DC",
+				"message": "Be in top 2 on any leaderboard.",
+				"permanent" : true
+			},
+			"11": {
+				"name": "Rose Gold",
+				"color": "FFF48FB1",
+				"internalColor": "CCFFEBEE",
+				"message": "350 MangoCoins.",
+				"value": 350
+			},
+			"12": {
+				"name": "Midnight Gala",
+				"color": "FF000000",
+				"internalColor": "FFF0F8FF",
+				"message": "350 MangoCoins.",
+				"value": 350
+			},
+			"13": {
+				"name": "Sunset",
+				"color": "FFFF4F00",
+				"internalColor": "FFFFF44F",
+				"message": "Unlocks all premium skins and removes all ads.\nAnd you support my work of course, thanks :)",
+				"purchaseId": "skin_premium"
+			},
+			"14": {
+				"name": "Underground Green",
+				"color": "FF8A9A5B",
+				"internalColor": "FFF5FFFA",
+				"message": "Eat a total of 1000 mangoes."
+			},
+			"15": {
+				"name": "Nebula",
+				"color": "FF4B0082",
+				"internalColor": "FFE6E6FA",
+				"message": "500 MangoCoins.",
+				"value": 500
+			},
+			"16": {
+				"name": "Glacier",
+				"color": "FFF0FFFF",
+				"internalColor": "FFAFDCEC",
+				"message": "Score at least 10 in Extreme mode."
+			},
+			"17": {
+				"name": "Crimson",
+				"color": "FF36454F",
+				"internalColor": "FFFF4500",
+				"message": "500 MangoCoins.",
+				"value": 500
+			},
+			"18": {
+				"name": "Golden Hour",
+				"color": "FFD4AF37",
+				"internalColor": "FFFFF0CA",
+				"message": "Score at least 60 in Hard mode."
+			},
+			"19": {
+				"name": "Quartz",
+				"color": "FFF7CAC9",
+				"internalColor": "FF8B5E5E",
+				"message": "Eat a total of 2000 mangoes."
+			},
+			"20": {
+				"name": "Dragon’s Eye",
+				"color": "FF800000",
+				"internalColor": "FFFFD700",
+				"message": "Score at least 110 in Easy mode."
+			},
+			"21": {
+				"name": "Electric Lime",
+				"color": "FFCCFF00",
+				"internalColor": "FF98FB98",
+				"message": "600 MangoCoins.",
+				"value": 600
+			},
+			"22": {
+				"name": "Copper",
+				"color": "FFB87333",
+				"internalColor": "FFF5F5DC",
+				"message": "600 MangoCoins.",
+				"value": 600
+			},
+			"23": {
+				"name": "Teal",
+				"color": "FF008080",
+				"internalColor": "FFFDF5E6",
+				"message": "750 MangoCoins.",
+				"value": 750
+			},
+			"24": {
+				"name": "Supernova",
+				"color": "FFFF00FF",
+				"internalColor": "CC4B0082",
+				"message": "750 MangoCoins.",
+				"value": 750
+			},
+			"25": {
+				"name": "Toxic Lime",
+				"color": "FF00FF00",
+				"internalColor": "CC2C3E50",
+				"message": "1000 MangoCoins.",
+				"value": 1000
+			},
+			"26": {
+				"name": "Cyan",
+				"color": "FF00F5FF",
+				"internalColor": "CC1A237E",
+				"message": "1000 MangoCoins.",
+				"value": 1000
+			},
+			"27": {
+				"name": "Orange Core",
+				"color": "FFFF3D00",
+				"internalColor": "CC3E2723",
+				"message": "Unlocks all premium skins and removes all ads.\nAnd you support my work of course, thanks :)",
+				"purchaseId": "skin_premium"
+			},
+			"28": {
+				"name": "Ghostly White",
+				"color": "FFCFD8DC",
+				"internalColor": "CC455A64",
+				"message": "1100 MangoCoins.",
+				"value": 1100
+			},
+			"29": {
+				"name": "Ultraviolet",
+				"color": "FF6200EA",
+				"internalColor": "CC311B92",
+				"message": "1100 MangoCoins.",
+				"value": 1100
+			}
+		}
+	}
+}

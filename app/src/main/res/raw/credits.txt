@@ -1,0 +1,53 @@
+{MangoSnake^FFFF0000} {v??version??^FFFF0000} - android
+
+The classic game is back with a fresh neon look and better features!
+Built using my custom Android game engine.
+
+&&Code ~ {OrangoMango^FFFFD600}
+&&UI ~ {OrangoMango^FFFFD600}
+&&Server and Account ~ {OrangoMango^FFFFD600}
+&&Sound effects and Music ~ freesound.org & pixabay.com
+
+~~~~~~~~~
+
+Made by {Paul^FFFFD600} {Kocian^FFFFD600} aka {OrangoMango^FFFFD600}
+{https://orangomango.org^FF4CC9F0}
+
+MangoGames ID: {https://id.orangomango.org^FF4CC9F0}
+
+~~~~~~~~~
+
+&&Desktop version (Java/JavaFX) {source^FFE1BEE7} {code^FFE1BEE7} ~ {https://github.com/OrangoMango/Snake^FF4CC9F0}
+&&{Desktop^FFE1BEE7} and {Browser^FFE1BEE7} version game page ~ {https://orangomango.itch.io/snake^FF4CC9F0}
+&&{Game^FFE1BEE7} {Page^FFE1BEE7} and {Leaderboards^FFE1BEE7} ~ {https://id.orangomango.org/games/mangosnake^FF4CC9F0}
+
+~~~~~~~~~
+
+&&First PC publish date ~ {28-05-2023^FF76FF03}
+&&v3.0 desktop update ~ {07-03-2026^FF76FF03}
+&&Android release date ~ {16-04-2026^FF76FF03}
+
+~~~~~~~~~
+
+Special thanks to those who helped me develop this game during the testing phase:
+
+&&Matteo Boccali ~ {OkinX^FFFF4F00}
+&&Francesco Sposito ~ {KOSP1^FFFF4F00}
+&&Giovanni Sposito ~ {Finiarel3^FFFF4F00}
+
+&&Andrea Bonaccorsi ~ {Anlu1970^FFFF4F00}
+&&Giulio Mannari ~ {eroico_378^FFFF4F00}
+&&Giuseppe Gurciullo ~ {Buono_007^FFFF4F00}
+&&Nicole Zbulj ~ {Nicky^FFFF4F00}
+&&Peter Kocian ~ {P37er^FFFF4F00}
+&&Simone Boco ~ {Simon97^FFFF4F00}
+
+And to {catezstar^FFFF4F00} for making a few snake skins :)
+
+~~~~~~~~~
+
+"short loops 31 01 2015 c 5.mp3" by B_Lamerichs -- https://freesound.org/s/262767/ -- License: Attribution 4.0
+
+~~~~~~~~~
+
+{Thank^FFFF00D4} {you^FFFF00D4} {very^FFFF00D4} {much^FFFF00D4} {for^FFFF00D4} {playing^FFFF00D4} {:)^FFFF00D4}
