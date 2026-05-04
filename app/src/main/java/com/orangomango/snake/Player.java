@@ -357,7 +357,7 @@ public class Player{
 		}
 		if (gameMode.equals("medium")){
 			if (currentScore >= 50) achievementsClient.unlock(PlayAchievement.MEDIUM_1.getId());
-			if (currentScore >= 120) achievementsClient.unlock(PlayAchievement.MEDIUM_2.getId());
+			if (currentScore >= 100) achievementsClient.unlock(PlayAchievement.MEDIUM_2.getId());
 			if (currentScore >= 150) achievementsClient.unlock(PlayAchievement.MEDIUM_3.getId());
 		}
 		if (gameMode.equals("hard")){

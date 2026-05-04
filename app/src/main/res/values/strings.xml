@@ -1,5 +1,5 @@
 <resources>
     <string translatable="false" name="app_name">MangoSnake</string>
-    <string translatable="false" name="app_version">3.1.9996</string>
+    <string translatable="false" name="app_version">3.1.9997</string>
     <string translatable="false" name="package_name">com.orangomango.snake</string>
 </resources>
