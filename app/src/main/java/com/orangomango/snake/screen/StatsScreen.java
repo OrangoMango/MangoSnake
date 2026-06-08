@@ -34,12 +34,12 @@ public class StatsScreen extends Screen{
 	private String headers = "Loading...", data = "Loading...";
 	private int appleColor, appleInternalColor;
 
-	private ArrayList<ArrayList<Pair<String, int[]>>> leaderboards;
+	private ArrayList<ArrayList<Pair<String, long[]>>> leaderboards;
 	private Account account;
 	private Player player;
 	private double dragOffset, lastDragY;
 
-	public StatsScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, int[]>>> leads, double skinsUnlockedProgress, int totalSkins){
+	public StatsScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, long[]>>> leads, double skinsUnlockedProgress, int totalSkins){
 		super(gameView);
 
 		this.account = account;

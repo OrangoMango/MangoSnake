@@ -45,7 +45,7 @@ public class CustomizeScreen extends Screen{
 	private int appleSelectedIndex = 0;
 	private Player player;
 	private Button equipSnake, equipApple;
-	private ArrayList<ArrayList<Pair<String, int[]>>> leaderboards;
+	private ArrayList<ArrayList<Pair<String, long[]>>> leaderboards;
 	private int snakeColorsPage = 0, appleColorsPage = 0;
 	private Account account;
 	private volatile double skinsUnlockedProgress;
@@ -82,7 +82,7 @@ public class CustomizeScreen extends Screen{
 		BUTTON_IMAGES.put("button_image_29", R.drawable.button_image_29);
 	}
 
-	public CustomizeScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, int[]>>> leads){
+	public CustomizeScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, long[]>>> leads){
 		super(gameView);
 
 		String jsonData = FileHelper.readRawResource(this.gameView.getContext(), R.raw.customize);

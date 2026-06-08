@@ -32,7 +32,7 @@ public class ShopScreen extends Screen{
 	private static int SCREEN_W, SCREEN_H;
 
 	private Account account;
-	private ArrayList<ArrayList<Pair<String, int[]>>> leaderboards;
+	private ArrayList<ArrayList<Pair<String, long[]>>> leaderboards;
 
 	private final ArrayList<UiElement> uielements = new ArrayList<>();
 	private Player player;
@@ -47,7 +47,7 @@ public class ShopScreen extends Screen{
 	private final Rectangle2D container3 = new Rectangle2D(this.screenView.getMinX()+this.screenView.getWidth()*0.53, this.screenView.getMinY()+this.screenView.getHeight()*0.05, this.screenView.getWidth()*0.22, this.screenView.getHeight()*0.90);
 	private final Rectangle2D container4 = new Rectangle2D(this.screenView.getMinX()+this.screenView.getWidth()*0.79, this.screenView.getMinY()+this.screenView.getHeight()*0.05, this.screenView.getWidth()*0.22, this.screenView.getHeight()*0.90);
 
-	public ShopScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, int[]>>> leads){
+	public ShopScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, long[]>>> leads){
 		super(gameView);
 
 		this.player = player;

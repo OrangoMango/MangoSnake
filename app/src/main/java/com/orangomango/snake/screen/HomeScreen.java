@@ -48,7 +48,7 @@ public class HomeScreen extends Screen{
 	private final Button control_dPad, control_joystick, control_swipe;
 	private Account account = null;
 	private String gameMode = null;
-	private final ArrayList<ArrayList<Pair<String, int[]>>> leaderboards = new ArrayList<>();
+	private final ArrayList<ArrayList<Pair<String, long[]>>> leaderboards = new ArrayList<>();
 	private int currentLeadMode;
 	private final InputField usernameField, passwordField;
 	private final GlobalSettings globalSettings;
@@ -448,7 +448,7 @@ public class HomeScreen extends Screen{
 		this.passwordField.setText("");
 		this.loginButton.setStyle(0xFFEF4444, 0xFF7F1D1D, "LOGOUT", null);
 
-		FileHelper.writeInternalFile(this.gameView.getContext(), "credentials.data", this.account.getUsername()+" "+this.account.getPassword());
+		FileHelper.writeInternalFile(this.gameView.getContext(), "credentials.data", this.account.getUsername().trim()+" "+this.account.getPassword().trim());
 
 		this.player.syncAndSave(account); // Sync accounts on login
 
@@ -495,7 +495,7 @@ public class HomeScreen extends Screen{
 
 		// Render leaderboard
 		if (this.currentLeadMode < this.leaderboards.size()){
-			ArrayList<Pair<String, int[]>> data = this.leaderboards.get(this.currentLeadMode);
+			ArrayList<Pair<String, long[]>> data = this.leaderboards.get(this.currentLeadMode);
 			renderLeaderboard(canvas, data);
 		} else {
 			canvas.fillText("Logging in...", UiElement.rw(this.leaderboardRect.getMinX()+this.leaderboardRect.getWidth()*0.5), UiElement.rh(this.leaderboardRect.getMinY()+this.leaderboardRect.getHeight()*0.5), 0xFFFFFFFF, UiElement.FONT_MEDIUM, TextAlignment.CENTER);
@@ -526,7 +526,7 @@ public class HomeScreen extends Screen{
 		canvas.restore();
 	}
 
-	private void renderLeaderboard(ICanvas canvas, ArrayList<Pair<String, int[]>> data){
+	private void renderLeaderboard(ICanvas canvas, ArrayList<Pair<String, long[]>> data){
 		final double bx = this.leaderboardRect.getMinX();
 		final double by = this.leaderboardRect.getMinY();
 		final double bw = this.leaderboardRect.getWidth();
@@ -540,7 +540,7 @@ public class HomeScreen extends Screen{
 		int counter = 0;
 		for (int i = 0; i < data.size(); i++) {
 			double rowY = by + (0.33 + (counter * 0.075)) * bh;
-			Pair<String, int[]> entry = data.get(i);
+			Pair<String, long[]> entry = data.get(i);
 
 			if (this.account != null){
 				if (this.filterFriends && !entry.getKey().equals(this.account.getUsername()) && !this.friends.contains(entry.getKey())){
@@ -557,10 +557,11 @@ public class HomeScreen extends Screen{
 		}
 
 		if (this.account != null){
-			int userRank = -1, userScore = 0;
+			int userRank = -1;
+			long userScore = 0;
 			int count = 1;
 
-			for (Pair<String, int[]> p : data){
+			for (Pair<String, long[]> p : data){
 				if (this.filterFriends && !p.getKey().equals(this.account.getUsername()) && !this.friends.contains(p.getKey())){
 					continue;
 				}
@@ -669,16 +670,16 @@ public class HomeScreen extends Screen{
 			try {
 				for (JSONObject ob : objects){
 					if (ob == null) continue;
-					ArrayList<Pair<String, int[]>> scores = new ArrayList<>();
+					ArrayList<Pair<String, long[]>> scores = new ArrayList<>();
 					JSONArray array = ob.getJSONArray("data");
 					for (int i = 0; i < array.length(); i++){
 						JSONObject pl = (JSONObject) array.get(i);
-						int[] arr = new int[pl.getJSONArray("score").length()];
+						long[] arr = new long[pl.getJSONArray("score").length()];
 						for (int j = 0; j < arr.length; j++){
-							arr[j] = pl.getJSONArray("score").getInt(j);
+							arr[j] = pl.getJSONArray("score").getLong(j);
 						}
 
-						scores.add(new Pair<String, int[]>(pl.getString("name"), arr));
+						scores.add(new Pair<String, long[]>(pl.getString("name"), arr));
 					}
 
 					synchronized (this){
@@ -691,13 +692,13 @@ public class HomeScreen extends Screen{
 
 			synchronized (this){
 				this.leaderboards.stream().forEach(l -> l.sort((p1, p2) -> {
-					int[] l1 = p1.getValue();
-					int[] l2 = p2.getValue();
+					long[] l1 = p1.getValue();
+					long[] l2 = p2.getValue();
 					int len = Math.max(l1.length, l2.length);
 					for (int i = 0; i < len; i++){
-						int a = i < l1.length ? l1[i] : 0;
-						int b = i < l2.length ? l2[i] : 0;
-						if (a != b) return Integer.compare(b, a);
+						long a = i < l1.length ? l1[i] : 0;
+						long b = i < l2.length ? l2[i] : 0;
+						if (a != b) return Long.compare(b, a);
 					}
 					return 0;
 				}));
