@@ -2,6 +2,7 @@ package com.orangomango.snake.screen;
 
 import java.util.*;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
@@ -75,19 +76,25 @@ public class HomeScreen extends Screen{
 		}
 	}
 
-	private static class GlobalSettings{
+	public static class GlobalSettings{
 		public double musicVolume;
 		public double effectsVolume;
 		public int controlMethod;
 		public boolean vibrations;
 		public boolean leftHanded;
+		public boolean randomSkin;
 
-		public GlobalSettings(double musicVolume, double effectsVolume, int controlMethod, boolean vibrations, boolean leftHanded){
+		public GlobalSettings(double musicVolume, double effectsVolume, int controlMethod, boolean vibrations, boolean leftHanded, boolean randomSkin){
 			this.musicVolume = musicVolume;
 			this.effectsVolume = effectsVolume;
 			this.controlMethod = controlMethod;
 			this.vibrations = vibrations;
 			this.leftHanded = leftHanded;
+			this.randomSkin = randomSkin;
+		}
+
+		public void saveSettings(Context context){
+			FileHelper.writeInternalFile(context, "app.settings", String.format("%s %s %d %d %d %d", this.musicVolume, this.effectsVolume, this.controlMethod, this.vibrations ? 1 : 0, this.leftHanded ? 1 : 0, this.randomSkin ? 1 : 0));
 		}
 	}
 
@@ -161,7 +168,7 @@ public class HomeScreen extends Screen{
 
 		if (PURCHASE_HANDLER == null) PURCHASE_HANDLER = new PurchaseHandler(null, null, this.gameView);
 
-		this.globalSettings = new GlobalSettings(0.5, 1, 0, true, false);
+		this.globalSettings = new GlobalSettings(0.5, 1, 0, true, false, false);
 		String savedSettings = FileHelper.readInternalFile(this.gameView.getContext(), "app.settings");
 		if (savedSettings != null){
 			try{
@@ -171,8 +178,9 @@ public class HomeScreen extends Screen{
 				this.globalSettings.controlMethod = Integer.parseInt(data[2]);
 				this.globalSettings.vibrations = Integer.parseInt(data[3]) == 1;
 				this.globalSettings.leftHanded = Integer.parseInt(data[4]) == 1;
+				this.globalSettings.randomSkin = Integer.parseInt(data[5]) == 1;
 			} catch (Exception ex){
-				FileHelper.deleteInternalFile(this.gameView.getContext(), "app.settings");
+				FileHelper.deleteInternalFile(this.gameView.getContext(), "app.settings"); // Reset settings file when corrupted
 			}
 		}
 
@@ -244,14 +252,14 @@ public class HomeScreen extends Screen{
 		});
 
 		this.playButton = new Button(this.gameView, 0xFF10B981, 0xFF059669, 0.55, 0.82, 0.40, 0.12, "PLAY RANKED", UiElement.FONT_LARGE, 0xFFFFFFFF, () -> {
-			GameScreen gs = new GameScreen(this.gameView, this.account, this.player, this.gameMode, (int)(1/speedSlider.getValue()), aiMode.getSelected(), wrapping.getSelected(), this.globalSettings.controlMethod, this.globalSettings.leftHanded);
+			GameScreen gs = new GameScreen(this.gameView, this.account, this.player, this.gameMode, (int)(1/speedSlider.getValue()), aiMode.getSelected(), wrapping.getSelected(), this.globalSettings.controlMethod, this.globalSettings.leftHanded, this.globalSettings.randomSkin);
 			gs.initGame((int)cellSlider.getValue());
 			this.gameView.setScreen(gs);
 		});
 		this.playButton.setBorderSize(0.0045);
 
 		Button skinsButton = new Button(this.gameView, 0x1AFF007F, 0xFFF472B6, 0.28, 0.82, 0.20, 0.12, "CUSTOMIZE", UiElement.FONT_LARGE, 0xFFFFFFFF, () -> {
-			CustomizeScreen cs = new CustomizeScreen(this.gameView, this.player, this.account, this.leaderboards);
+			CustomizeScreen cs = new CustomizeScreen(this.gameView, this.player, this.account, this.leaderboards, this.globalSettings);
 			this.gameView.setScreen(cs);
 		});
 
@@ -313,27 +321,27 @@ public class HomeScreen extends Screen{
 		musicVolume.setOnStateChanged(() -> {
 			AUDIO.setMusicVolume((float)musicVolume.getValue());
 			this.globalSettings.musicVolume = musicVolume.getValue();
-			saveSettings();
+			this.globalSettings.saveSettings(this.gameView.getContext());
 		});
 		Slider effectsVolume = new Slider(this.gameView, 0.852, 0.47, 0.1, 0.10, "SFX", "%"); // Percentage
 		effectsVolume.setInterval(0, 1, this.globalSettings.effectsVolume);
 		effectsVolume.setOnStateChanged(() -> {
 			AUDIO.setSoundVolume((float)effectsVolume.getValue());
 			this.globalSettings.effectsVolume = effectsVolume.getValue();
-			saveSettings();
+			this.globalSettings.saveSettings(this.gameView.getContext());
 		});
 		ToggleButton vibrations = new ToggleButton(this.gameView, 0.744, 0.58, 0.21, 0.10, "Vibrations");
 		vibrations.setSelected(this.globalSettings.vibrations);
 		vibrations.setOnStateChanged(() -> {
 			this.gameView.setVibrate(vibrations.getSelected());
 			this.globalSettings.vibrations = vibrations.getSelected();
-			saveSettings();
+			this.globalSettings.saveSettings(this.gameView.getContext());
 		});
 		ToggleButton leftHanded = new ToggleButton(this.gameView, 0.744, 0.65, 0.21, 0.10, "Left-handed");
 		leftHanded.setSelected(this.globalSettings.leftHanded);
 		leftHanded.setOnStateChanged(() -> {
 			this.globalSettings.leftHanded = leftHanded.getSelected();
-			saveSettings();
+			this.globalSettings.saveSettings(this.gameView.getContext());
 		});
 
 		// Control mode (settings)
@@ -387,10 +395,6 @@ public class HomeScreen extends Screen{
 		this.uielements.add(this.control_dPad);
 		this.uielements.add(this.control_joystick);
 		this.uielements.add(this.control_swipe);
-	}
-
-	private void saveSettings(){
-		FileHelper.writeInternalFile(this.gameView.getContext(), "app.settings", String.format("%s %s %d %d %d", this.globalSettings.musicVolume, this.globalSettings.effectsVolume, this.globalSettings.controlMethod, this.globalSettings.vibrations ? 1 : 0, this.globalSettings.leftHanded ? 1 : 0));
 	}
 
 	@Override
@@ -592,7 +596,7 @@ public class HomeScreen extends Screen{
 	private void setControlMethod(int value){
 		final int activeColor = 0xFF4CC9F0;
 		this.globalSettings.controlMethod = value;
-		saveSettings();
+		this.globalSettings.saveSettings(this.gameView.getContext());
 
 		switch (value){
 			case 0:

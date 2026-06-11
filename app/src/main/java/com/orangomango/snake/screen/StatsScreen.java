@@ -35,16 +35,18 @@ public class StatsScreen extends Screen{
 	private int appleColor, appleInternalColor;
 
 	private ArrayList<ArrayList<Pair<String, long[]>>> leaderboards;
+	private HomeScreen.GlobalSettings globalSettings;
 	private Account account;
 	private Player player;
 	private double dragOffset, lastDragY;
 
-	public StatsScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, long[]>>> leads, double skinsUnlockedProgress, int totalSkins){
+	public StatsScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, long[]>>> leads, HomeScreen.GlobalSettings gset, double skinsUnlockedProgress, int totalSkins){
 		super(gameView);
 
 		this.account = account;
 		this.player = player;
 		this.leaderboards = leads;
+		this.globalSettings = gset;
 		this.appleColor = this.player.getAppleColor(player.getAppleIndex());
 		this.appleInternalColor = this.player.getAppleInternalColor(player.getAppleIndex());
 
@@ -166,7 +168,7 @@ public class StatsScreen extends Screen{
 
 	@Override
 	public void goBack(Activity activity){
-		CustomizeScreen cs = new CustomizeScreen(this.gameView, this.player, this.account, this.leaderboards);
+		CustomizeScreen cs = new CustomizeScreen(this.gameView, this.player, this.account, this.leaderboards, this.globalSettings);
 		this.gameView.setScreen(cs);
 	}
 

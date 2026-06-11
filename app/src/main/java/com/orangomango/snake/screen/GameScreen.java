@@ -7,6 +7,7 @@ import android.app.Activity;
 
 import com.google.android.gms.games.LeaderboardsClient;
 import com.google.android.gms.games.PlayGames;
+import com.orangomango.androidbridge.FileHelper;
 import com.orangomango.androidbridge.ICanvas;
 import com.orangomango.androidbridge.PointerEvent;
 import com.orangomango.androidbridge.geometry.Rectangle2D;
@@ -116,7 +117,7 @@ public class GameScreen extends Screen{
 		}
 	}
 
-	public GameScreen(GameView gameView, Account account, Player player, String gameMode, int timeInterval, boolean ai, boolean wrap, int controlMethod, boolean leftHanded){
+	public GameScreen(GameView gameView, Account account, Player player, String gameMode, int timeInterval, boolean ai, boolean wrap, int controlMethod, boolean leftHanded, boolean randomSkin){
 		super(gameView);
 
 		this.timeInterval = timeInterval;
@@ -128,6 +129,10 @@ public class GameScreen extends Screen{
 		this.account = account;
 		this.gameMode = gameMode;
 		this.player = player;
+
+		if (randomSkin){
+			CustomizeScreen.selectRandomPlayer(this.gameView.getContext(), this.player);
+		}
 
 		if (this.gameMode != null){
 			new Thread(() -> {
@@ -712,7 +717,7 @@ public class GameScreen extends Screen{
 		if (this.apple != null) this.apple.render(canvas, this.player.getAppleColor(this.player.getAppleIndex()), this.player.getAppleInternalColor(this.player.getAppleIndex()));
 
 		final int snakeIndex = this.player.getSnakeIndex();
-		final int snakeColor = this.player.getSnakeColor(this.player.getSnakeIndex());
+		final int snakeColor = this.player.getSnakeColor(snakeIndex);
 		synchronized (this){
 			for (int count = 0; count < 2; count++){ // Draw a second time to avoid internal dropshadow effects
 				final int snakeSize = this.snake.size();

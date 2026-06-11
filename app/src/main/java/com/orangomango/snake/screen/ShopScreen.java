@@ -35,6 +35,7 @@ public class ShopScreen extends Screen{
 	private ArrayList<ArrayList<Pair<String, long[]>>> leaderboards;
 
 	private final ArrayList<UiElement> uielements = new ArrayList<>();
+	private HomeScreen.GlobalSettings globalSettings;
 	private Player player;
 	private boolean owned1, owned3;
 	private Button button2, button4, button5;
@@ -47,12 +48,13 @@ public class ShopScreen extends Screen{
 	private final Rectangle2D container3 = new Rectangle2D(this.screenView.getMinX()+this.screenView.getWidth()*0.53, this.screenView.getMinY()+this.screenView.getHeight()*0.05, this.screenView.getWidth()*0.22, this.screenView.getHeight()*0.90);
 	private final Rectangle2D container4 = new Rectangle2D(this.screenView.getMinX()+this.screenView.getWidth()*0.79, this.screenView.getMinY()+this.screenView.getHeight()*0.05, this.screenView.getWidth()*0.22, this.screenView.getHeight()*0.90);
 
-	public ShopScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, long[]>>> leads){
+	public ShopScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, long[]>>> leads, HomeScreen.GlobalSettings gset){
 		super(gameView);
 
 		this.player = player;
 		this.account = account;
 		this.leaderboards = leads;
+		this.globalSettings = gset;
 
 		SHOP1 = BitmapFactory.decodeResource(this.gameView.getContext().getResources(), R.drawable.shop_1);
 		SHOP2 = BitmapFactory.decodeResource(this.gameView.getContext().getResources(), R.drawable.shop_2);
@@ -62,7 +64,7 @@ public class ShopScreen extends Screen{
 
 	@Override
 	public void goBack(Activity activity){
-		CustomizeScreen cs = new CustomizeScreen(this.gameView, this.player, this.account, this.leaderboards);
+		CustomizeScreen cs = new CustomizeScreen(this.gameView, this.player, this.account, this.leaderboards, this.globalSettings);
 		this.gameView.setScreen(cs);
 	}
 

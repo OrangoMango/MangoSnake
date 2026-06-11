@@ -1,11 +1,13 @@
 package com.orangomango.snake.screen;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +51,7 @@ public class CustomizeScreen extends Screen{
 	private int snakeColorsPage = 0, appleColorsPage = 0;
 	private Account account;
 	private volatile double skinsUnlockedProgress;
+	private HomeScreen.GlobalSettings globalSettings;
 
 	private int TOTAL_SNAKE_COLORS, TOTAL_APPLE_COLORS;
 
@@ -82,7 +85,7 @@ public class CustomizeScreen extends Screen{
 		BUTTON_IMAGES.put("button_image_29", R.drawable.button_image_29);
 	}
 
-	public CustomizeScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, long[]>>> leads){
+	public CustomizeScreen(GameView gameView, Player player, Account account, ArrayList<ArrayList<Pair<String, long[]>>> leads, HomeScreen.GlobalSettings gset){
 		super(gameView);
 
 		String jsonData = FileHelper.readRawResource(this.gameView.getContext(), R.raw.customize);
@@ -97,6 +100,9 @@ public class CustomizeScreen extends Screen{
 		this.player = player;
 		this.account = account;
 		this.leaderboards = leads;
+		this.globalSettings = gset;
+
+		if (this.globalSettings.randomSkin) selectRandomPlayer(this.gameView.getContext(), this.player);
 
 		// Move to the correct page
 		this.snakeColorsPage = this.player.getSnakeIndex() / 6;
@@ -130,25 +136,59 @@ public class CustomizeScreen extends Screen{
 		}
 	}
 
+	public static void selectRandomPlayer(Context context, Player player){
+		String data = FileHelper.readInternalFile(context, "skins.txt");
+		if (data != null){
+			String[] s = data.split("\n");
+			int idx = -1;
+			for (int i = 0; i < s.length; i++){
+				if (!s[i].isEmpty()){
+					int v = Integer.parseInt(s[i]);
+					if (v > 0){
+						idx = i;
+						break;
+					}
+				}
+			}
+
+			Random random = new Random();
+			int ra = random.nextInt(idx+1);
+			int rs = random.nextInt(s.length-idx+1);
+
+			player.updateSnakeIndex(ra == idx ? 0 : -Integer.parseInt(s[ra]));
+			player.updateAppleIndex(rs == s.length-idx ? 0 : Integer.parseInt(s[idx+rs]));
+			player.save();
+		}
+	}
+
 	private int calculateSkinsProgress(){
+		StringBuilder builder = new StringBuilder();
+
 		// Calculate the percentage of unlocked skins
 		double count = 0;
 		int payonly = 0;
 		for (int i = -TOTAL_APPLE_COLORS; i <= TOTAL_SNAKE_COLORS; i++){ // i=0 is useless
-			if (i == 15) continue;
 			double p = calculateProgress(i);
+			if (i == 15) continue;
 			if (Double.isInfinite(p)){
 				payonly++;
+				if (i > 0 ? this.player.isPermanentSnake(i-1) : this.player.isPermanentApple(-i-1)){
+					builder.append(i > 0 ? i-1 : i+1).append("\n");
+				}
 			} else {
 				if ((p >= 1 && !isCoinTask(i > 0 ? i-1 : i+1)) || (i > 0 ? this.player.isPermanentSnake(i-1) : this.player.isPermanentApple(-i-1))){
 					count++;
+					builder.append(i > 0 ? i-1 : i+1).append("\n");
 				}
 			}
 		}
 		this.skinsUnlockedProgress = count / (TOTAL_SNAKE_COLORS+TOTAL_APPLE_COLORS-payonly-1);
 		if (this.skinsUnlockedProgress == 1.0){
 			PlayGames.getAchievementsClient((Activity) this.gameView.getContext()).unlock(PlayAchievement.CHAMALEON.getId());
+			builder.append("14\n"); // "Unlock all skins" snake skin id
 		}
+
+		FileHelper.writeInternalFile(this.gameView.getContext(), "skins.txt", builder.toString());
 
 		return TOTAL_SNAKE_COLORS+TOTAL_APPLE_COLORS-payonly-1;
 	}
@@ -174,7 +214,7 @@ public class CustomizeScreen extends Screen{
 				if ((new Rectangle2D(rsw(this.shopButton.getMinX()), rsh(this.shopButton.getMinY()), rsw(this.shopButton.getWidth()), rsw(this.shopButton.getHeight()))).contains(event.x, event.y)){
 					this.gameView.triggerVibration(100);
 					AUDIO.playSound("gui");
-					ShopScreen ss = new ShopScreen(this.gameView, this.player, this.account, this.leaderboards);
+					ShopScreen ss = new ShopScreen(this.gameView, this.player, this.account, this.leaderboards, this.globalSettings);
 					this.gameView.setScreen(ss);
 					return;
 				}
@@ -426,7 +466,7 @@ public class CustomizeScreen extends Screen{
 			});
 
 			Button statsButton = new Button(this.gameView, 0xFF4CC9F0, 0xFF0C6F8D, rsw(0.79) / WIDTH, rsh(0.03) / HEIGHT, rsw(0.05) / WIDTH, rsw(0.05) / HEIGHT, null, -1, 0, () -> {
-				StatsScreen ss = new StatsScreen(this.gameView, this.player, this.account, this.leaderboards, this.skinsUnlockedProgress, calculateSkinsProgress());
+				StatsScreen ss = new StatsScreen(this.gameView, this.player, this.account, this.leaderboards, this.globalSettings, this.skinsUnlockedProgress, calculateSkinsProgress());
 				this.gameView.setScreen(ss);
 			});
 			statsButton.setGlow(true);
@@ -442,6 +482,13 @@ public class CustomizeScreen extends Screen{
 			googlePlayGamesButton.setGlow(true);
 			googlePlayGamesButton.setBitmap(BitmapFactory.decodeResource(this.gameView.getContext().getResources(), R.drawable.gpg));
 
+			ToggleButton randomSkin = new ToggleButton(this.gameView, rsw(this.preview.getMinX()+this.preview.getWidth()*0.1) / WIDTH, rsh(this.preview.getMinY()+this.preview.getHeight()*0.15) / HEIGHT, rsw(this.preview.getWidth()*0.8) / WIDTH, rsh(this.preview.getHeight()*0.12) / HEIGHT, "Random Skin");
+			randomSkin.setSelected(this.globalSettings.randomSkin);
+			randomSkin.setOnStateChanged(() -> {
+				this.globalSettings.randomSkin = randomSkin.getSelected();
+				this.globalSettings.saveSettings(this.gameView.getContext());
+			});
+
 			selectSnakeColor(this.player.getSnakeIndex());
 			selectAppleColor(this.player.getAppleIndex());
 
@@ -449,6 +496,7 @@ public class CustomizeScreen extends Screen{
 			this.uielements.add(this.equipApple);
 			this.uielements.add(statsButton);
 			this.uielements.add(googlePlayGamesButton);
+			this.uielements.add(randomSkin);
 		} else {
 			for (int i = 0; i < 12; i++){
 				Button button = (Button) this.uielements.get(i);
@@ -605,7 +653,7 @@ public class CustomizeScreen extends Screen{
 		// Render preview snake
 		canvas.fillText("Preview", rsw(this.preview.getMinX()+this.preview.getWidth()*0.5), rsh(this.preview.getMinY()+this.preview.getHeight()*0.08), 0xFF94F7D4, UiElement.FONT_MEDIUM, TextAlignment.CENTER);
 		final double startX = rsw(this.preview.getMinX()+this.preview.getWidth()*0.15);
-		final double startY = rsh(this.preview.getMinY()+this.preview.getHeight()*0.25);
+		final double startY = rsh(this.preview.getMinY()+this.preview.getHeight()*0.35);
 		final int size = (int) rsw(0.2*this.preview.getWidth());
 
 		for (int i = 0; i < 2; i++){
