@@ -70,7 +70,7 @@ public class GameScreen extends Screen{
 	private static long LAST_AD_TIME = System.currentTimeMillis();
 	private Player player;
 	private long gameStartTime;
-	private boolean leftHanded;
+	private boolean leftHanded, randomSkin;
 
 	// Controller
 	private final Rectangle2D controllerRect = new Rectangle2D(0.75, 0.10, 0.23,0.15);
@@ -125,12 +125,13 @@ public class GameScreen extends Screen{
 		this.wrap = wrap;
 		this.controlMethod = controlMethod;
 		this.leftHanded = leftHanded;
+		this.randomSkin = randomSkin;
 
 		this.account = account;
 		this.gameMode = gameMode;
 		this.player = player;
 
-		if (randomSkin){
+		if (this.randomSkin){
 			CustomizeScreen.selectRandomPlayer(this.gameView.getContext(), this.player);
 		}
 
@@ -432,6 +433,10 @@ public class GameScreen extends Screen{
 		this.steps = 0;
 		this.gameStartTime = System.currentTimeMillis();
 
+		if (this.randomSkin){
+			CustomizeScreen.selectRandomPlayer(this.gameView.getContext(), this.player);
+		}
+
 		AUDIO.playSound("gamestart");
 		generateApple();
 	}
@@ -496,6 +501,20 @@ public class GameScreen extends Screen{
 		float tx = event.x;
 		float ty = event.y;
 
+		Rectangle2D homeButton = new Rectangle2D(rsw_reverse(this.homeBtnX)-rsw(this.radius), rsh(this.homeBtnY)-rsw(this.radius), rsw(this.radius)*2, rsw(this.radius)*2);
+		if (event.type == PointerEvent.Type.PRESSED && homeButton.contains(tx, ty)){ // This button can be clicked even during gameover screen.
+			AUDIO.playSound("gui");
+			this.gameView.triggerVibration(65);
+			if (System.currentTimeMillis()-LAST_AD_TIME >= AD_COOLDOWN && !this.player.isAdBlockEnabled()){
+				LAST_AD_TIME = System.currentTimeMillis();
+				this.gameView.showIntersitial(() -> {
+					goBack(null);
+				});
+			} else {
+				goBack(null);
+			}
+		}
+
 		if (this.gameFinished){
 			if (System.currentTimeMillis()-this.gameOverStartTime > GAME_OVER_TIME){
 				this.gameView.triggerVibration(100);
@@ -540,20 +559,6 @@ public class GameScreen extends Screen{
 				if (controllerButton == 2){
 					togglePause();
 					this.gameView.triggerVibration(65);
-				}
-
-				Rectangle2D homeButton = new Rectangle2D(rsw_reverse(this.homeBtnX)-rsw(this.radius), rsh(this.homeBtnY)-rsw(this.radius), rsw(this.radius)*2, rsw(this.radius)*2);
-				if (homeButton.contains(tx, ty)){
-					AUDIO.playSound("gui");
-					this.gameView.triggerVibration(65);
-					if (System.currentTimeMillis()-LAST_AD_TIME >= AD_COOLDOWN && !this.player.isAdBlockEnabled()){
-						LAST_AD_TIME = System.currentTimeMillis();
-						this.gameView.showIntersitial(() -> {
-							goBack(null);
-						});
-					} else {
-						goBack(null);
-					}
 				}
 
 				if (!this.ai){
