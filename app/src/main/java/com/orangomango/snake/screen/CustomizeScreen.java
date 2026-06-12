@@ -144,7 +144,7 @@ public class CustomizeScreen extends Screen{
 			for (int i = 0; i < s.length; i++){
 				if (!s[i].isEmpty()){
 					int v = Integer.parseInt(s[i]);
-					if (v > 0){
+					if (v == 0){
 						idx = i;
 						break;
 					}
@@ -153,10 +153,10 @@ public class CustomizeScreen extends Screen{
 
 			Random random = new Random();
 			int ra = random.nextInt(idx+1);
-			int rs = random.nextInt(s.length-idx+1);
+			int rs = random.nextInt(s.length-idx-2);
 
-			player.updateSnakeIndex(ra == idx ? 0 : -Integer.parseInt(s[ra]));
-			player.updateAppleIndex(rs == s.length-idx ? 0 : Integer.parseInt(s[idx+rs]));
+			player.updateSnakeIndex(-Integer.parseInt(s[ra]));
+			player.updateAppleIndex(Integer.parseInt(s[idx+1+rs]));
 			player.save();
 		}
 	}
@@ -399,6 +399,21 @@ public class CustomizeScreen extends Screen{
 				}
 			}
 
+			ToggleButton randomSkin = new ToggleButton(this.gameView, rsw(this.preview.getMinX()+this.preview.getWidth()*0.1) / WIDTH, rsh(this.preview.getMinY()+this.preview.getHeight()*0.15) / HEIGHT, rsw(this.preview.getWidth()*0.8) / WIDTH, rsh(this.preview.getHeight()*0.12) / HEIGHT, "Random Skin");
+			randomSkin.setSelected(this.globalSettings.randomSkin);
+			randomSkin.setOnStateChanged(() -> {
+				this.globalSettings.randomSkin = randomSkin.getSelected();
+				this.globalSettings.saveSettings(this.gameView.getContext());
+
+				if (this.globalSettings.randomSkin){
+					selectRandomPlayer(this.gameView.getContext(), this.player);
+					this.snakeColorsPage = this.player.getSnakeIndex() / 6;
+					this.appleColorsPage = this.player.getAppleIndex() / 6;
+					selectSnakeColor(this.player.getSnakeIndex());
+					selectAppleColor(this.player.getAppleIndex());
+				}
+			});
+
 			// Add equip buttons
 			this.equipSnake = new Button(this.gameView, 0xFF10B981, 0xFF059669, rsw(this.snakeInfo.getMinX()+this.snakeInfo.getWidth()*0.05) / WIDTH, rsh(this.snakeInfo.getMinY()+this.snakeInfo.getHeight()*0.7) / HEIGHT, rsw(this.snakeInfo.getWidth()*0.9) / WIDTH, rsh(this.snakeInfo.getHeight()*0.2) / HEIGHT, "EQUIP SKIN", UiElement.FONT_LARGE, 0xFFFFFFFF, () -> {
 				try{
@@ -411,10 +426,17 @@ public class CustomizeScreen extends Screen{
 							selectSnakeColor(this.snakeSelectedIndex);
 							selectAppleColor(this.appleSelectedIndex);
 							calculateSkinsProgress();
+
+							this.globalSettings.randomSkin = false;
+							randomSkin.setSelected(false);
+							this.globalSettings.saveSettings(this.gameView.getContext());
 						});
 					} else {
 						this.player.updateSnakeIndex(this.snakeSelectedIndex);
 						this.player.save();
+						this.globalSettings.randomSkin = false;
+						randomSkin.setSelected(false);
+						this.globalSettings.saveSettings(this.gameView.getContext());
 						selectSnakeColor(this.snakeSelectedIndex);
 						if (!this.player.isPermanentSnake(this.snakeSelectedIndex)){
 							if (isPermanentTask(this.snakeSelectedIndex) || isCoinTask(this.snakeSelectedIndex)){
@@ -443,10 +465,17 @@ public class CustomizeScreen extends Screen{
 							selectSnakeColor(this.snakeSelectedIndex);
 							selectAppleColor(this.appleSelectedIndex);
 							calculateSkinsProgress();
+
+							this.globalSettings.randomSkin = false;
+							randomSkin.setSelected(false);
+							this.globalSettings.saveSettings(this.gameView.getContext());
 						});
 					} else {
 						this.player.updateAppleIndex(this.appleSelectedIndex);
 						this.player.save();
+						this.globalSettings.randomSkin = false;
+						randomSkin.setSelected(false);
+						this.globalSettings.saveSettings(this.gameView.getContext());
 						selectAppleColor(this.appleSelectedIndex);
 						if (!this.player.isPermanentApple(this.appleSelectedIndex)){
 							if (isPermanentTask(-this.appleSelectedIndex) || isCoinTask(-this.appleSelectedIndex)){
@@ -481,13 +510,6 @@ public class CustomizeScreen extends Screen{
 			});
 			googlePlayGamesButton.setGlow(true);
 			googlePlayGamesButton.setBitmap(BitmapFactory.decodeResource(this.gameView.getContext().getResources(), R.drawable.gpg));
-
-			ToggleButton randomSkin = new ToggleButton(this.gameView, rsw(this.preview.getMinX()+this.preview.getWidth()*0.1) / WIDTH, rsh(this.preview.getMinY()+this.preview.getHeight()*0.15) / HEIGHT, rsw(this.preview.getWidth()*0.8) / WIDTH, rsh(this.preview.getHeight()*0.12) / HEIGHT, "Random Skin");
-			randomSkin.setSelected(this.globalSettings.randomSkin);
-			randomSkin.setOnStateChanged(() -> {
-				this.globalSettings.randomSkin = randomSkin.getSelected();
-				this.globalSettings.saveSettings(this.gameView.getContext());
-			});
 
 			selectSnakeColor(this.player.getSnakeIndex());
 			selectAppleColor(this.player.getAppleIndex());

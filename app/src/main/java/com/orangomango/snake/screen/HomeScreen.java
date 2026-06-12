@@ -193,15 +193,21 @@ public class HomeScreen extends Screen{
 			int[] gridSize = GameDifficulty.calculateGridSize(value);
 			return String.format("%dx%d", gridSize[0], gridSize[1]);
 		});
-		speedSlider = new Slider(this.gameView, 0.548, 0.40, 0.15, 0.10, "Speed", "%"); // Percentage
+		speedSlider = new Slider(this.gameView, 0.548, 0.38, 0.15, 0.10, "Speed", "%"); // Percentage
 		speedSlider.setInterval(1/300.0, 1/40.0, GAME_SETTINGS.speed);
 		speedSlider.setBounds(0.01, 1.0); // Don't allow 0%
 
 		// Toggle buttons
-		aiMode = new ToggleButton(this.gameView, 0.548, 0.52, 0.15, 0.08, "Auto-Play");
+		aiMode = new ToggleButton(this.gameView, 0.548, 0.49, 0.15, 0.08, "Auto-Play");
 		aiMode.setSelected(GAME_SETTINGS.autoplay);
-		wrapping = new ToggleButton(this.gameView, 0.548, 0.59, 0.15, 0.08, "Wrapping");
+		wrapping = new ToggleButton(this.gameView, 0.548, 0.56, 0.15, 0.08, "Wrapping");
 		wrapping.setSelected(GAME_SETTINGS.wrapping);
+
+		// Game mode button
+		Button gameModeButton = new Button(this.gameView, 0xFF0099FF, 0xFF00E5FF, 0.548, 0.66, 0.15, 0.07, "Game Mode", UiElement.FONT_MEDIUM, 0xFFFFFFFF, () -> {
+			CasualScreen cs = new CasualScreen(this.gameView);
+			this.gameView.setScreen(cs);
+		});
 
 		// Login
 		this.usernameField = new InputField(this.gameView, 0.0465, 0.231, 0.162, 0.05, "Username");
@@ -366,7 +372,7 @@ public class HomeScreen extends Screen{
 		this.gameView.setVibrate(this.globalSettings.vibrations);
 
 		this.uielements.add(new Container(this.gameView, 0xFF0F172A, 0xFF1E293B, 0.0375, 0.15, 0.18, 0.28, 0xFF94F7D4, UiElement.FONT_MEDIUM, "MangoGames ID")); // Authentication
-		this.uielements.add(new Container(this.gameView, 0xFF0F172A, 0xFF1E293B, 0.0375, 0.45, 0.18, 0.32, 0xFF94F7D4, UiElement.FONT_MEDIUM, "Game mode")); // Game mode selection
+		this.uielements.add(new Container(this.gameView, 0xFF0F172A, 0xFF1E293B, 0.0375, 0.45, 0.18, 0.32, 0xFF94F7D4, UiElement.FONT_MEDIUM, "Difficulty")); // Game difficulty selection
 		this.uielements.add(new Container(this.gameView, 0xFF0F172A, 0xFF1E293B, this.leaderboardRect.getMinX(), this.leaderboardRect.getMinY(), this.leaderboardRect.getWidth(), this.leaderboardRect.getHeight(), 0xFF94F7D4, UiElement.FONT_MEDIUM, "Leaderboard")); // Leaderboard
 		this.uielements.add(new Container(this.gameView, 0xFF0F172A, 0xFF1E293B, 0.533, 0.15, 0.18, 0.62, 0xFF94F7D4, UiElement.FONT_MEDIUM, "Custom game")); // Custom settings
 		this.uielements.add(new Container(this.gameView, 0xFF0F172A, 0xFF1E293B, this.settingsRect.getMinX(), this.settingsRect.getMinY(), this.settingsRect.getWidth(), this.settingsRect.getHeight(), 0xFF94F7D4, UiElement.FONT_MEDIUM, "Settings")); // App settings
@@ -379,6 +385,7 @@ public class HomeScreen extends Screen{
 		this.uielements.add(speedSlider);
 		this.uielements.add(aiMode);
 		this.uielements.add(wrapping);
+		this.uielements.add(gameModeButton);
 		this.uielements.add(this.usernameField);
 		this.uielements.add(this.passwordField);
 		this.uielements.add(this.loginButton);

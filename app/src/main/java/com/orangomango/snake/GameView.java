@@ -90,7 +90,7 @@ public class GameView extends View{
 			String localAppVersion = getResources().getString(R.string.app_version);
 			// Bypass update required screen while on debug mode
 			if ((context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0 && appVersion != null && !appVersion.equals(localAppVersion)){
-				this.game = new UpdateScreen(this, appVersion);
+				//this.game = new UpdateScreen(this, appVersion); // TODO: Beta-version
 			}
 		}).start();
 
