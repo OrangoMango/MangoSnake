@@ -64,7 +64,7 @@ public class Account{
 
 	public static String getAppVersion(){
 		try{
-			ApiResponse response = sendPostRequest("/account/api/version.php", "");
+			ApiResponse response = sendPostRequest("/account/api/version_beta_temp.php", ""); // TODO: rename endpoint, remove 2 server files (_temp)
 			if (response != null && response.getCode() == 200){
 				JSONObject dt = new JSONObject(response.getContent());
 				return dt.getString("data");
@@ -153,6 +153,9 @@ public class Account{
 			data.put("score", scores);
 
 			ApiResponse response = sendPostRequest("/leaderboard/lead.php", "json_data=" + data.toString());
+
+			System.out.println(response.getContent());
+
 			if (response != null && response.getCode() == 200){
 				JSONObject dt = new JSONObject(response.getContent());
 				return dt.getBoolean("success");

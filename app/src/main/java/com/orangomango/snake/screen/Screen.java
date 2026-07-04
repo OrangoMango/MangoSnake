@@ -17,6 +17,10 @@ public abstract class Screen{
 		activity.finish();
 	}
 
+	public void handleKeyDown(int keyCode){
+		// Do nothing
+	}
+
 	public abstract void handleInput(PointerEvent event);
 	public abstract void update(int screenWidth, int screenHeight);
 	public abstract void render(ICanvas canvas);

@@ -205,7 +205,7 @@ public class HomeScreen extends Screen{
 
 		// Game mode button
 		Button gameModeButton = new Button(this.gameView, 0xFF0099FF, 0xFF00E5FF, 0.548, 0.66, 0.15, 0.07, "Game Mode", UiElement.FONT_MEDIUM, 0xFFFFFFFF, () -> {
-			CasualScreen cs = new CasualScreen(this.gameView);
+			CasualScreen cs = new CasualScreen(this.gameView, this.account, this.player);
 			this.gameView.setScreen(cs);
 		});
 

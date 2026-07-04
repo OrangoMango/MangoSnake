@@ -4,10 +4,11 @@ import java.util.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.util.Log;
+import android.view.KeyEvent;
 
 import com.google.android.gms.games.LeaderboardsClient;
 import com.google.android.gms.games.PlayGames;
-import com.orangomango.androidbridge.FileHelper;
 import com.orangomango.androidbridge.ICanvas;
 import com.orangomango.androidbridge.PointerEvent;
 import com.orangomango.androidbridge.geometry.Rectangle2D;
@@ -20,6 +21,7 @@ import com.orangomango.snake.game.GameWorld;
 import com.orangomango.snake.game.SnakeBody;
 import com.orangomango.snake.Player;
 import com.orangomango.snake.R;
+import com.orangomango.snake.game.lan.Client;
 import com.orangomango.snake.ui.UiElement;
 import com.orangomango.snake.game.ai.*;
 import com.orangomango.account.Account;
@@ -71,6 +73,8 @@ public class GameScreen extends Screen{
 	private Player player;
 	private long gameStartTime;
 	private boolean leftHanded, randomSkin;
+
+	private Client client;
 
 	// Controller
 	private final Rectangle2D controllerRect = new Rectangle2D(0.75, 0.10, 0.23,0.15);
@@ -198,8 +202,8 @@ public class GameScreen extends Screen{
 
 						SnakeBody next = getNext(head);
 						boolean dead = false;
-						for (int i = 0; i < snake.size(); i++){
-							SnakeBody body = snake.get(i);
+						for (int i = 0; i < this.snake.size(); i++){
+							SnakeBody body = this.snake.get(i);
 							if (head != body && head.x == body.x && head.y == body.y){
 								dead = true;
 								break;
@@ -284,6 +288,15 @@ public class GameScreen extends Screen{
 		});
 		gameThread.setDaemon(true);
 		gameThread.start();
+	}
+
+	public void connect(Client client){
+		this.client = client;
+	}
+
+	// Listen for data incoming from the server
+	public void handleConnectionData(String data){
+
 	}
 
 	private boolean isSafe(Point point){
@@ -432,6 +445,7 @@ public class GameScreen extends Screen{
 		this.score = 0;
 		this.steps = 0;
 		this.gameStartTime = System.currentTimeMillis();
+		this.inputDir = null;
 
 		if (this.randomSkin){
 			CustomizeScreen.selectRandomPlayer(this.gameView.getContext(), this.player);
@@ -497,12 +511,39 @@ public class GameScreen extends Screen{
 	}
 
 	@Override
+	public void handleKeyDown(int keyCode){
+		switch (keyCode){
+			case KeyEvent.KEYCODE_W:
+			case KeyEvent.KEYCODE_DPAD_UP:
+				this.inputDir = Side.TOP;
+				break;
+
+			case KeyEvent.KEYCODE_S:
+			case KeyEvent.KEYCODE_DPAD_DOWN:
+				this.inputDir = Side.BOTTOM;
+				break;
+
+
+			case KeyEvent.KEYCODE_A:
+			case KeyEvent.KEYCODE_DPAD_LEFT:
+				this.inputDir = Side.LEFT;
+				break;
+
+			case KeyEvent.KEYCODE_D:
+			case KeyEvent.KEYCODE_DPAD_RIGHT:
+				this.inputDir = Side.RIGHT;
+				break;
+
+		}
+	}
+
+	@Override
 	public void handleInput(PointerEvent event){
 		float tx = event.x;
 		float ty = event.y;
 
 		Rectangle2D homeButton = new Rectangle2D(rsw_reverse(this.homeBtnX)-rsw(this.radius), rsh(this.homeBtnY)-rsw(this.radius), rsw(this.radius)*2, rsw(this.radius)*2);
-		if (event.type == PointerEvent.Type.PRESSED && homeButton.contains(tx, ty)){ // This button can be clicked even during gameover screen.
+		if (event.type == PointerEvent.Type.PRESSED && homeButton.contains(tx, ty) && (this.paused || this.gameFinished)){
 			AUDIO.playSound("gui");
 			this.gameView.triggerVibration(65);
 			if (System.currentTimeMillis()-LAST_AD_TIME >= AD_COOLDOWN && !this.player.isAdBlockEnabled()){
@@ -922,18 +963,20 @@ public class GameScreen extends Screen{
 		}
 
 		// Home button
-		canvas.fillRoundRect(rsw_reverse(this.homeBtnX)-rsw(this.radius), rsh(this.homeBtnY)-rsw(this.radius), rsw(this.radius)*2, rsw(this.radius)*2, UiElement.rh(0.035), UiElement.rh(0.035), 0x08FFFFFF);
-		canvas.setEffect(10, 0xFF2DD4BF);
-		canvas.strokeRoundRect(rsw_reverse(this.homeBtnX)-rsw(this.radius), rsh(this.homeBtnY)-rsw(this.radius), rsw(this.radius)*2, rsw(this.radius)*2, UiElement.rh(0.035), UiElement.rh(0.035), 0x33FFFFFF, UiElement.rh(0.0025));
-		canvas.clearEffect();
+		if (this.paused || this.gameFinished){
+			canvas.fillRoundRect(rsw_reverse(this.homeBtnX)-rsw(this.radius), rsh(this.homeBtnY)-rsw(this.radius), rsw(this.radius)*2, rsw(this.radius)*2, UiElement.rh(0.035), UiElement.rh(0.035), 0x08FFFFFF);
+			canvas.setEffect(10, 0xFF2DD4BF);
+			canvas.strokeRoundRect(rsw_reverse(this.homeBtnX)-rsw(this.radius), rsh(this.homeBtnY)-rsw(this.radius), rsw(this.radius)*2, rsw(this.radius)*2, UiElement.rh(0.035), UiElement.rh(0.035), 0x33FFFFFF, UiElement.rh(0.0025));
+			canvas.clearEffect();
 		
-		double[] roofX = new double[]{rsw_reverse(this.homeBtnX), rsw_reverse(this.homeBtnX)-rsw(0.013), rsw_reverse(this.homeBtnX)+rsw(0.013)};
-		double[] roofY = new double[]{rsh(this.homeBtnY-0.022), rsh(this.homeBtnY-0.004), rsh(this.homeBtnY-0.004)};
-		canvas.fillPolygon(roofX, roofY, 3, 0x4D22D3EE);
-		
-		double[] bodyX = new double[]{rsw_reverse(this.homeBtnX)-rsw(0.009), rsw_reverse(this.homeBtnX)-rsw(0.009), rsw_reverse(this.homeBtnX)+rsw(0.009), rsw_reverse(this.homeBtnX)+rsw(0.009)};
-		double[] bodyY = new double[]{rsh(this.homeBtnY-0.002), rsh(this.homeBtnY+0.020), rsh(this.homeBtnY+0.020), rsh(this.homeBtnY-0.002)};
-		canvas.fillPolygon(bodyX, bodyY, 4, 0x4D22D3EE);
+			double[] roofX = new double[]{rsw_reverse(this.homeBtnX), rsw_reverse(this.homeBtnX)-rsw(0.013), rsw_reverse(this.homeBtnX)+rsw(0.013)};
+			double[] roofY = new double[]{rsh(this.homeBtnY-0.022), rsh(this.homeBtnY-0.004), rsh(this.homeBtnY-0.004)};
+			canvas.fillPolygon(roofX, roofY, 3, 0x4D22D3EE);
+
+			double[] bodyX = new double[]{rsw_reverse(this.homeBtnX)-rsw(0.009), rsw_reverse(this.homeBtnX)-rsw(0.009), rsw_reverse(this.homeBtnX)+rsw(0.009), rsw_reverse(this.homeBtnX)+rsw(0.009)};
+			double[] bodyY = new double[]{rsh(this.homeBtnY-0.002), rsh(this.homeBtnY+0.020), rsh(this.homeBtnY+0.020), rsh(this.homeBtnY-0.002)};
+			canvas.fillPolygon(bodyX, bodyY, 4, 0x4D22D3EE);
+		}
 	}
 
 	private int controllerButtonPressed(double ex, double ey){

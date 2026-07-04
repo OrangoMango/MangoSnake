@@ -18,6 +18,7 @@ import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Vibrator;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.graphics.Rect;
@@ -66,6 +67,11 @@ public class GameView extends View{
 	public GameView(Context context, BillingManager billingManager){
 		super(context);
 
+		// Keyboard input
+		setFocusable(true);
+		setFocusableInTouchMode(true);
+		requestFocus();
+
 		// Load audio
 		AUDIO = new AndroidAudio();
 		AUDIO.loadSound(context, "gameover", R.raw.gameover);
@@ -88,9 +94,21 @@ public class GameView extends View{
 		new Thread(() -> {
 			String appVersion = Account.getAppVersion();
 			String localAppVersion = getResources().getString(R.string.app_version);
+
+			boolean contained = false;
+			if (appVersion != null){
+				String[] parts = appVersion.split(" ");
+				for (int i = 0; i < parts.length; i++){
+					if (parts[i].equals(localAppVersion)){
+						contained = true;
+						break;
+					}
+				}
+			}
+
 			// Bypass update required screen while on debug mode
-			if ((context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0 && appVersion != null && !appVersion.equals(localAppVersion)){
-				//this.game = new UpdateScreen(this, appVersion); // TODO: Beta-version
+			if ((context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0 && !contained){
+				this.game = new UpdateScreen(this, appVersion);
 			}
 		}).start();
 
@@ -224,8 +242,14 @@ public class GameView extends View{
 		}
 
 		game.handleInput(new PointerEvent(tx, ty, type));
-		invalidate();
+		invalidate(); // TODO: really useful?
 		return true;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event){
+		game.handleKeyDown(keyCode);
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
