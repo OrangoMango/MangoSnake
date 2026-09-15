@@ -1,5 +1,7 @@
 package com.orangomango.snake.game.lan;
 
+import android.util.Log;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -17,14 +19,12 @@ public class Manager implements Runnable{
 			this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 			this.writer = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
 
+			String ip = this.reader.readLine();
+
 			// Add this manager to the list
 			Manager.managers.add(this);
 
-			if (Manager.managers.size() == 1){
-				this.writer.write("SERVER");
-				this.writer.newLine();
-				this.writer.flush();
-			}
+			broadcast(String.format("{'event': 'playerCount', 'count': %d, 'host': '%s'}", Manager.managers.size(), ip));
 		} catch (IOException ex){
 			ex.printStackTrace();
 			close();
@@ -44,6 +44,7 @@ public class Manager implements Runnable{
 	}
 
 	private void broadcast(String data){
+		Log.d("LANDebug", "Broadcasting: " + data);
 		for (Manager manager : Manager.managers){
 			try {
 				manager.writer.write(data);
@@ -61,6 +62,7 @@ public class Manager implements Runnable{
 		while (this.socket.isConnected()){
 			try {
 				String data = this.reader.readLine();
+				Log.d("LANDebug", "Client received: " + data);
 				if (data == null){
 					throw new IOException("Client disconnected");
 				}

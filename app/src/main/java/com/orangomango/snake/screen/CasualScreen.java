@@ -98,7 +98,7 @@ public class CasualScreen extends Screen{
 				gs.initGame(35);
 
 				Thread clientThread = new Thread(() -> {
-					Client client = new Client(field.getText().equals("") ? this.localAddress : field.getText(), 1234);
+					Client client = new Client(field.getText().equals("") ? this.localAddress : field.getText(), 1234, this.localAddress); // TODO (local host must not be considered)
 					gs.connect(client);
 					if (client.getSocket() != null){
 						this.gameView.setScreen(gs);

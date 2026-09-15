@@ -154,7 +154,7 @@ public class Account{
 
 			ApiResponse response = sendPostRequest("/leaderboard/lead.php", "json_data=" + data.toString());
 
-			System.out.println(response.getContent());
+			System.out.println((this.uid == null) + response.getContent());
 
 			if (response != null && response.getCode() == 200){
 				JSONObject dt = new JSONObject(response.getContent());

@@ -11,13 +11,18 @@ public class Client{
 	private BufferedReader reader;
 	private BufferedWriter writer;
 
-	public Client(String host, int port){
+	private String myIp;
+
+	public Client(String host, int port, String myIp){
+		this.myIp = myIp;
+
 		try {
 			this.socket = new Socket(host, port);
 			this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 			this.writer = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
 
-
+			// Send ip
+			send(myIp);
 		} catch (IOException ex){
 			ex.printStackTrace();
 			close();
@@ -50,7 +55,7 @@ public class Client{
 		while (this.socket.isConnected()){
 			try {
 				String data = this.reader.readLine();
-				//Log.d("LANDebug", "Client received " + data);
+				//Log.d("LANDebug", "Client class received " + data);
 				consumer.accept(data);
 			} catch (IOException ex){
 				ex.printStackTrace();
@@ -61,5 +66,9 @@ public class Client{
 
 	public Socket getSocket(){
 		return this.socket;
+	}
+
+	public String getMyIp(){
+		return this.myIp;
 	}
 }
