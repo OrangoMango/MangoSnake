@@ -27,7 +27,7 @@ public class Game{
 	private long gameStartTime;
 
 	private Runnable gameResetEvent;
-	private Consumer<Integer> scoreEvent, gameOverEvent;
+	private Consumer<Integer> scoreEvent, gameOverEvent, gameWonEvent;
 
 	public Game(String gameMode, int timeInterval, boolean ai, boolean wrap){
 		this.gameMode = gameMode;
@@ -202,7 +202,9 @@ public class Game{
 
 	private void generateApple(){
 		Apple apple = new Apple(random.nextInt(this.gameWorld.getWidth()), random.nextInt(this.gameWorld.getHeight()));
-		for (List<SnakeBody> snakeBody : this.snake.values()){
+		for (Map.Entry<String, List<SnakeBody>> entry : this.snake.entrySet()){
+			List<SnakeBody> snakeBody = entry.getValue();
+
 			for (int i = 0; i < snakeBody.size(); i++){
 				SnakeBody sb = snakeBody.get(i);
 				if ((sb.x == apple.x && sb.y == apple.y)){
@@ -211,15 +213,15 @@ public class Game{
 						return;
 					} else {
 						apple = null;
-						/*new Thread(() -> {
+						new Thread(() -> {
 							try {
 								Thread.sleep(2200);
 								this.gameFinished = true;
-								resetGame(true);
+								this.gameWonEvent.accept(this.score.get(entry.getKey()));
 							} catch (InterruptedException ex){
 								ex.printStackTrace();
 							}
-						}).start();*/
+						}).start();
 						break;
 					}
 				}
@@ -300,6 +302,10 @@ public class Game{
 
 	public void setOnGameOver(Consumer<Integer> c){
 		this.gameOverEvent = c;
+	}
+
+	public void setOnGameWon(Consumer<Integer> c){
+		this.gameWonEvent = c;
 	}
 
 	public String getGameMode(){

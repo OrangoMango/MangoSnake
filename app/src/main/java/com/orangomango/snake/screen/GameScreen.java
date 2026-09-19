@@ -157,6 +157,10 @@ public class GameScreen extends Screen{
 			}
 		});
 
+		this.game.setOnGameWon(score -> {
+			resetGame(score, true);
+		});
+
 		this.controlMethod = controlMethod;
 		this.leftHanded = leftHanded;
 		this.randomSkin = randomSkin;
